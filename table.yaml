@@ -1,6 +1,9 @@
 cloudtrail-service-disabled:
+ "Object": "+__OBJECT__+#"
  "Region": "+__OBJECT__.violations.__RULE__.region+~https://console.aws.amazon.com/cloudtrail/home?region=+__OBJECT__.violations.__RULE__.region+#"
 no-global-trails:
+ "Name": "+__OBJECT__.violator_info.name+#"
+ "ARN": "+__OBJECT__.violator_info.trail_arn+#"
  "Region": "+__OBJECT__.violations.__RULE__.region+~https://console.aws.amazon.com/cloudtrail/home?region=+__OBJECT__.violations.__RULE__.region+#"
 cloudtrail-inventory:
  "Trail Name": "__OBJECT__~https://+__OBJECT__.violations.__RULE__.region+.console.aws.amazon.com/cloudtrail/home?region=+__OBJECT__.violations.__RULE__.region+#/configuration/+__OBJECT__.violations.__RULE__.result_info.0.object.trail_arn+"
@@ -9,4 +12,15 @@ cloudtrail-inventory:
  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
  "AWS Tags": "__TAGS__"
 cloudtrail-no-global-trails:
+ "Name": "+__OBJECT__.violator_info.name+#"
+ "ARN": "+__OBJECT__.violator_info.trail_arn+#"
  "Region": "+__OBJECT__.violations.__RULE__.region+~https://console.aws.amazon.com/cloudtrail/home?region=+__OBJECT__.violations.__RULE__.region+#"
+cloudtrail-log-file-validating:
+ "Name": "+__OBJECT__.violator_info.name+#"
+ "ARN": "+__OBJECT__.violator_info.trail_arn+#"
+ "Region": "+__OBJECT__.violations.__RULE__.region+~https://console.aws.amazon.com/cloudtrail/home?region=+__OBJECT__.violations.__RULE__.region+#"
+cloudtrail-logs-encrypted:
+ "Name": "+__OBJECT__.violator_info.name+#"
+ "ARN": "+__OBJECT__.violator_info.trail_arn+#"
+ "Region": "+__OBJECT__.violations.__RULE__.region+~https://console.aws.amazon.com/cloudtrail/home?region=+__OBJECT__.violations.__RULE__.region+#"
+  
