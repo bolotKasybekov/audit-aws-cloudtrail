@@ -320,13 +320,6 @@ coreo_uni_util_variables "cloudtrail-update-planwide-2" do
             ])
 end
 
-coreo_uni_util_variables "cloudtrail-update-advisor-output" do
-  action :set
-  variables([
-                {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return'}
-            ])
-end
-
 coreo_uni_util_jsrunner "cis27-processor" do
   action (("${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}".include?("cloudtrail-logs-encrypted")) ? :run : :nothing)
   json_input (("${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}".include?("cloudtrail-logs-encrypted")) ? '[COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report, COMPOSITE::coreo_aws_rule_runner.cloudtrail-inventory-runner.report]' : '[]')
