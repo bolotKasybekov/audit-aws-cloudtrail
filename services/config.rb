@@ -87,7 +87,6 @@ coreo_aws_rule "cloudtrail-no-global-trails" do
   suggested_action "Enable CloudTrail global service logging in at least one region"
   description "CloudTrail global service logging is not enabled for the selected regions."
   level "Warning"
-  meta_cis_id "99.997"
   objectives [""]
   audit_objects [""]
   operators [""]
