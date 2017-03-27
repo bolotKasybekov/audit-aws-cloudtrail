@@ -10,7 +10,6 @@ coreo_aws_rule "cloudtrail-inventory" do
   category "Inventory"
   suggested_action "None."
   level "Informational"
-  meta_cis_id "99.999"
   objectives ["trails"]
   audit_objects ["object.trail_list.name"]
   operators ["=~"]
