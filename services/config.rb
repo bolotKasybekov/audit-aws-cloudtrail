@@ -390,7 +390,6 @@ coreo_uni_util_jsrunner "cis27-processor" do
       let kmsKeyExist = false
       results.forEach(result => {
           if ("kms_key_id" in result['object']){
-            console.log(result['object'])
             kmsKeyExist = true
           }
       })
