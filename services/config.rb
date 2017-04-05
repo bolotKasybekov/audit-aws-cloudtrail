@@ -40,7 +40,7 @@ end
 coreo_aws_rule "cloudtrail-log-file-validating" do
   action :define
   service :cloudtrail
-  link ""
+  link "http://kb.cloudcoreo.com/mydoc_cloudtrail-log-file-validating.html"
   display_name "Cloudtrail Log File Validation Disabled"
   description "CloudTrail log file validation is disabled for this trail. It should be enabled"
   category "Audit"
@@ -59,7 +59,7 @@ end
 coreo_aws_rule "cloudtrail-logs-cloudwatch" do
   action :define
   service :cloudtrail
-  link ""
+  link "http://kb.cloudcoreo.com/mydoc_cloudtrail-logs-cloudwatch.html"
   display_name "Cloudtrail Logs Integrated with CloudWatch"
   description "CloudTrail logs have not attempted delivery to CloudWatch in the last 24 hours. Ensure CloudWatch is integrated"
   category "Audit"
