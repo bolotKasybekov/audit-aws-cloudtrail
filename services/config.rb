@@ -141,11 +141,11 @@ coreo_aws_rule "cloudtrail-inventory" do
   description "Inventory CloudTrail"
   category "Inventory"
   level "Internal"
-  objectives    ["trails"]
+  objectives ["trails"]
   audit_objects ["object.trail_list.name"]
-  operators     ["=~"]
-  raise_when    [//]
-  id_map        "object.trail_list.name"
+  operators ["=~"]
+  raise_when [//]
+  id_map "object.trail_list.name"
 end
 
 coreo_aws_rule_runner "cloudtrail-inventory-runner" do
