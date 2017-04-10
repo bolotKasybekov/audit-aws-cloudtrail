@@ -132,12 +132,6 @@ coreo_aws_rule "cloudtrail-trail-with-global" do
   id_map "stack.current_region"
 end
 
-coreo_aws_rule_runner "cloudtrail-inventory-runner" do
-  action :run
-  service :cloudtrail
-  rules ["cloudtrail-inventory"]
-end
-
 coreo_uni_util_variables "cloudtrail-planwide" do
   action :set
   variables([
