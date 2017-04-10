@@ -132,6 +132,28 @@ coreo_aws_rule "cloudtrail-trail-with-global" do
   id_map "stack.current_region"
 end
 
+coreo_aws_rule "cloudtrail-inventory-1" do
+  action :define
+  service :cloudtrail
+  link "http://kb.cloudcoreo.com/"
+  include_violations_in_count false
+  display_name "Inventory CloudTrail"
+  description "Inventory CloudTrail"
+  category "Inventory"
+  level "Internal"
+  objectives    ["trails"]
+  audit_objects ["object.trail_list.name"]
+  operators     ["=~"]
+  raise_when    [//]
+  id_map        "object.trail_list.name"
+end
+
+coreo_aws_rule_runner "cloudtrail-inventory-runner" do
+  action :run
+  service :cloudtrail
+  rules ["cloudtrail-inventory-1"]
+end
+
 coreo_uni_util_variables "cloudtrail-planwide" do
   action :set
   variables([
