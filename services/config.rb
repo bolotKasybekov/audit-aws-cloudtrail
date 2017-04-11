@@ -3,7 +3,7 @@
 coreo_aws_rule "cloudtrail-inventory" do
   action :define
   service :cloudtrail
-  link "http://kb.cloudcoreo.com/mydoc-inventory.html"
+  link "http://kb.cloudcoreo.com/mydoc_all-inventory.html"
   include_violations_in_count false
   display_name "Cloudtrail Inventory"
   description "This rule performs an inventory on all trails in the target AWS account."
