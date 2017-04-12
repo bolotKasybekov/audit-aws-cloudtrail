@@ -3,7 +3,7 @@
 coreo_aws_rule "cloudtrail-inventory" do
   action :define
   service :cloudtrail
-  link "http://kb.cloudcoreo.com/mydoc-inventory.html"
+  link "http://kb.cloudcoreo.com/mydoc_all-inventory.html"
   include_violations_in_count false
   display_name "Cloudtrail Inventory"
   description "This rule performs an inventory on all trails in the target AWS account."
@@ -40,7 +40,7 @@ end
 coreo_aws_rule "cloudtrail-log-file-validating" do
   action :define
   service :cloudtrail
-  link ""
+  link "http://kb.cloudcoreo.com/mydoc_cloudtrail-log-file-validating.html"
   display_name "Cloudtrail Log File Validation Disabled"
   description "CloudTrail log file validation is disabled for this trail. It should be enabled"
   category "Audit"
@@ -59,7 +59,7 @@ end
 coreo_aws_rule "cloudtrail-logs-cloudwatch" do
   action :define
   service :cloudtrail
-  link ""
+  link "http://kb.cloudcoreo.com/mydoc_cloudtrail-logs-cloudwatch.html"
   display_name "Cloudtrail Logs Integrated with CloudWatch"
   description "CloudTrail logs have not attempted delivery to CloudWatch in the last 24 hours. Ensure CloudWatch is integrated"
   category "Audit"
@@ -98,7 +98,7 @@ coreo_aws_rule "cloudtrail-logs-encrypted" do
   action :define
   service :user
   category "Audit"
-  link "https://benchmarks.cisecurity.org/tools2/amazon/CIS_Amazon_Web_Services_Foundations_Benchmark_v1.1.0.pdf#page=84"
+  link "http://kb.cloudcoreo.com/mydoc_cloudtrail-logs-encrypted.html"
   display_name "Verify CloudTrail logs are encrypted at rest using KMS CMKs"
   suggested_action "It is recommended that CloudTrail be configured to use SSE-KMS."
   description "AWS CloudTrail is a web service that records AWS API calls for an account and makes those logs available to users and resources in accordance with IAM policies. AWS Key Management Service (KMS) is a managed service that helps create and control the encryption keys used to encrypt account data, and uses Hardware Security Modules (HSMs) to protect the security of encryption keys. CloudTrail logs can be configured to leverage server side encryption (SSE) and KMS customer created master keys (CMK) to further protect CloudTrail logs."
@@ -132,7 +132,7 @@ coreo_aws_rule "cloudtrail-trail-with-global" do
   id_map "stack.current_region"
 end
 
-coreo_aws_rule "cloudtrail-inventory" do
+coreo_aws_rule "cloudtrail-inventory-1" do
   action :define
   service :cloudtrail
   link "http://kb.cloudcoreo.com/"
@@ -151,20 +151,8 @@ end
 coreo_aws_rule_runner "cloudtrail-inventory-runner" do
   action :run
   service :cloudtrail
-  rules ["cloudtrail-inventory"]
+  rules ["cloudtrail-inventory-1"]
 end
-
-# cross-resource variable holder
-
-# TODO: plan vars for team (name/id) and cloud account (name/id)
-#list of available plan variables
-# run_id
-# revision
-# branch
-# id
-# name
-# stack_name
-# region
 
 coreo_uni_util_variables "cloudtrail-planwide" do
   action :set
