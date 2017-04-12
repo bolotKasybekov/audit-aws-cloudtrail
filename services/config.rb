@@ -141,11 +141,11 @@ coreo_aws_rule "cloudtrail-inventory-1" do
   description "Inventory CloudTrail"
   category "Inventory"
   level "Internal"
-  objectives    ["trails"]
+  objectives ["trails"]
   audit_objects ["object.trail_list.name"]
-  operators     ["=~"]
-  raise_when    [//]
-  id_map        "object.trail_list.name"
+  operators ["=~"]
+  raise_when [//]
+  id_map "object.trail_list.name"
 end
 
 coreo_aws_rule_runner "cloudtrail-inventory-runner" do
@@ -160,7 +160,7 @@ coreo_uni_util_variables "cloudtrail-planwide" do
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.composite_name' => 'PLAN::stack_name'},
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.plan_name' => 'PLAN::name'},
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'unset'},
-                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.number_violations' => '0'}
+                {'GLOBAL::number_violations' => '0'}
             ])
 end
 
@@ -181,7 +181,7 @@ coreo_uni_util_variables "cloudtrail-update-planwide-1" do
   action :set
   variables([
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report'},
-                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.number_violations' => 'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.number_violations'},
+                {'GLOBAL::number_violations' => 'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.number_violations'},
 
             ])
 end
@@ -302,7 +302,7 @@ coreo_uni_util_variables "cloudtrail-update-planwide-2" do
   variables([
                 {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return'},
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return'},
-                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.number_violations' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.violation_counter'}
+                {'GLOBAL::number_violations' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.violation_counter'}
             ])
 end
 
@@ -472,7 +472,7 @@ coreo_uni_util_variables "cloudtrail-update-planwide-4" do
   variables([
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.JSONReport'},
                 {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.report'},
-                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.table' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.table'}
+                {'GLOBAL::table' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.table'}
           ])
 end
 
