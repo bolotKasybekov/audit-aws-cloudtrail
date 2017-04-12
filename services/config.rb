@@ -10,7 +10,6 @@ coreo_aws_rule "cloudtrail-inventory" do
   category "Inventory"
   suggested_action "None."
   level "Informational"
-  meta_cis_id "99.999"
   objectives ["trails"]
   audit_objects ["object.trail_list.name"]
   operators ["=~"]
@@ -88,12 +87,30 @@ coreo_aws_rule "cloudtrail-no-global-trails" do
   suggested_action "Enable CloudTrail global service logging in at least one region"
   description "CloudTrail global service logging is not enabled for the selected regions."
   level "Warning"
-  meta_cis_id "99.997"
   objectives [""]
   audit_objects [""]
   operators [""]
   raise_when [true]
   id_map ""
+end
+
+coreo_aws_rule "cloudtrail-logs-encrypted" do
+  action :define
+  service :user
+  category "Audit"
+  link "https://benchmarks.cisecurity.org/tools2/amazon/CIS_Amazon_Web_Services_Foundations_Benchmark_v1.1.0.pdf#page=84"
+  display_name "Verify CloudTrail logs are encrypted at rest using KMS CMKs"
+  suggested_action "It is recommended that CloudTrail be configured to use SSE-KMS."
+  description "AWS CloudTrail is a web service that records AWS API calls for an account and makes those logs available to users and resources in accordance with IAM policies. AWS Key Management Service (KMS) is a managed service that helps create and control the encryption keys used to encrypt account data, and uses Hardware Security Modules (HSMs) to protect the security of encryption keys. CloudTrail logs can be configured to leverage server side encryption (SSE) and KMS customer created master keys (CMK) to further protect CloudTrail logs."
+  level "Warning"
+  meta_cis_id "2.7"
+  meta_cis_scored "true"
+  meta_cis_level "2"
+  objectives [""]
+  audit_objects [""]
+  operators [""]
+  raise_when [true]
+  id_map "static.no_op"
 end
 
 # end of user-visible content. Remaining resources are system-defined
@@ -115,6 +132,28 @@ coreo_aws_rule "cloudtrail-trail-with-global" do
   id_map "stack.current_region"
 end
 
+coreo_aws_rule "cloudtrail-inventory" do
+  action :define
+  service :cloudtrail
+  link "http://kb.cloudcoreo.com/"
+  include_violations_in_count false
+  display_name "Inventory CloudTrail"
+  description "Inventory CloudTrail"
+  category "Inventory"
+  level "Internal"
+  objectives ["trails"]
+  audit_objects ["object.trail_list.name"]
+  operators ["=~"]
+  raise_when [//]
+  id_map "object.trail_list.name"
+end
+
+coreo_aws_rule_runner "cloudtrail-inventory-runner" do
+  action :run
+  service :cloudtrail
+  rules ["cloudtrail-inventory"]
+end
+
 # cross-resource variable holder
 
 # TODO: plan vars for team (name/id) and cloud account (name/id)
@@ -133,7 +172,7 @@ coreo_uni_util_variables "cloudtrail-planwide" do
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.composite_name' => 'PLAN::stack_name'},
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.plan_name' => 'PLAN::name'},
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'unset'},
-                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.number_violations' => 'unset'}
+                {'GLOBAL::number_violations' => '0'}
             ])
 end
 
@@ -154,7 +193,7 @@ coreo_uni_util_variables "cloudtrail-update-planwide-1" do
   action :set
   variables([
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report'},
-                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.number_violations' => 'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.number_violations'},
+                {'GLOBAL::number_violations' => 'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.number_violations'},
 
             ])
 end
@@ -275,14 +314,95 @@ coreo_uni_util_variables "cloudtrail-update-planwide-2" do
   variables([
                 {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return'},
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return'},
-                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.number_violations' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.violation_counter'}
+                {'GLOBAL::number_violations' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.violation_counter'}
             ])
 end
 
-coreo_uni_util_variables "cloudtrail-update-advisor-output" do
-  action :set
+coreo_uni_util_jsrunner "cis27-processor" do
+  action (("${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}".include?("cloudtrail-logs-encrypted")) ? :run : :nothing)
+  json_input (("${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}".include?("cloudtrail-logs-encrypted")) ? '[COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report, COMPOSITE::coreo_aws_rule_runner.cloudtrail-inventory-runner.report]' : '[]')
+  function <<-'EOH'
+  const ruleMetaJSON = {
+      'cloudtrail-logs-encrypted': COMPOSITE::coreo_aws_rule.cloudtrail-logs-encrypted.inputs
+  };
+  const ruleInputsToKeep = ['service', 'category', 'link', 'display_name', 'suggested_action', 'description', 'level', 'meta_cis_id', 'meta_cis_scored', 'meta_cis_level', 'include_violations_in_count'];
+  const ruleMeta = {};
+
+  Object.keys(ruleMetaJSON).forEach(rule => {
+      const flattenedRule = {};
+      ruleMetaJSON[rule].forEach(input => {
+          if (ruleInputsToKeep.includes(input.name))
+              flattenedRule[input.name] = input.value;
+      })
+      ruleMeta[rule] = flattenedRule;
+  })
+
+  const USER_RULE = 'cloudtrail-logs-encrypted'
+  const INVENTORY_RULE = 'cloudtrail-inventory';
+
+  const regionArrayJSON = "${AUDIT_AWS_CLOUDTRAIL_REGIONS}";
+  const regionArray = JSON.parse(regionArrayJSON.replace(/'/g, '"'))
+
+  const inventory = json_input[1];
+  var json_output = json_input[0]
+
+  const violations = copyViolationInNewJsonInput(regionArray, json_output);
+
+  regionArray.forEach(region => {
+      if (!inventory[region]) return;
+
+      const trails = Object.keys(inventory[region]);
+
+      trails.forEach(trail => {
+          if (!inventory[region][trail]['violations'][INVENTORY_RULE] || !verifyTrailContainsKMSkey(inventory[region][trail]['violations'][INVENTORY_RULE]['result_info'])){
+                updateOutputWithResults(region, trail, inventory[region][trail]['violations'][INVENTORY_RULE], USER_RULE);
+          }
+      })
+  })
+
+  function copyViolationInNewJsonInput(regions, input) {
+      const output = {};
+      regions.forEach(regionKey => {
+          if (!input[regionKey]) {
+            output[regionKey] = {};
+          } else {
+            output[regionKey] = input[regionKey]
+          }
+      });
+      return output;
+  }
+
+  function updateOutputWithResults(region, objectID, objectDetails, rule) {
+      if (!violations[region][objectID]) {
+          violations[region][objectID] = {};
+          violations[region][objectID]['violator_info'] = objectDetails;
+      }
+      if (!violations[region][objectID]['violations']) {
+          violations[region][objectID]['violations'] = {};
+      }
+
+      violations[region][objectID]['violations'][rule] = Object.assign(ruleMeta[rule]);
+  }
+
+  function verifyTrailContainsKMSkey(results) {
+      let kmsKeyExist = false
+      results.forEach(result => {
+          if ("kms_key_id" in result['object']){
+            kmsKeyExist = true
+          }
+      })
+
+      return kmsKeyExist;
+  }
+
+  callback(violations);
+EOH
+end
+
+coreo_uni_util_variables "cloudtrail-update-planwide-3" do
+  action   action (("${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}".include?("cloudtrail-logs-encrypted")) ? :set : :nothing)
   variables([
-                {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return'}
+                {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cis27-processor.return'}
             ])
 end
 
@@ -293,7 +413,7 @@ coreo_uni_util_jsrunner "cloudtrail-tags-to-notifiers-array" do
   packages([
                {
                    :name => "cloudcoreo-jsrunner-commons",
-                   :version => "1.9.6-beta1"
+                   :version => "1.10.7-9"
                },
                {
                    :name => "js-yaml",
@@ -302,10 +422,10 @@ coreo_uni_util_jsrunner "cloudtrail-tags-to-notifiers-array" do
   json_input '{ "composite name":"PLAN::stack_name",
                 "plan name":"PLAN::name",
                 "cloud account name":"PLAN::cloud_account_name",
-                "violations": COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return}'
+                "violations": COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report}'
   function <<-EOH
 
-  
+
 
 function setTableAndSuppression() {
   let table;
@@ -317,13 +437,13 @@ function setTableAndSuppression() {
       suppression = yaml.safeLoad(fs.readFileSync('./suppression.yaml', 'utf8'));
   } catch (e) {
       console.log("Error reading suppression.yaml file");
-      suppression = {};  
+      suppression = {};
   }
   try {
       table = yaml.safeLoad(fs.readFileSync('./table.yaml', 'utf8'));
   } catch (e) {
       console.log("Error reading table.yaml file");
-      table = {};  
+      table = {};
   }
   coreoExport('table', JSON.stringify(table));
   coreoExport('suppression', JSON.stringify(suppression));
@@ -359,12 +479,12 @@ callback(letters);
   EOH
 end
 
-coreo_uni_util_variables "cloudtrail-update-planwide-3" do
+coreo_uni_util_variables "cloudtrail-update-planwide-4" do
   action :set
   variables([
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.JSONReport'},
                 {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.report'},
-                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.table' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.table'}
+                {'GLOBAL::table' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.table'}
           ])
 end
 
