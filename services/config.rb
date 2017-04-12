@@ -40,7 +40,7 @@ end
 coreo_aws_rule "cloudtrail-log-file-validating" do
   action :define
   service :cloudtrail
-  link ""
+  link "http://kb.cloudcoreo.com/mydoc_cloudtrail-log-file-validating.html"
   display_name "Cloudtrail Log File Validation Disabled"
   description "CloudTrail log file validation is disabled for this trail. It should be enabled"
   category "Audit"
@@ -59,7 +59,7 @@ end
 coreo_aws_rule "cloudtrail-logs-cloudwatch" do
   action :define
   service :cloudtrail
-  link ""
+  link "http://kb.cloudcoreo.com/mydoc_cloudtrail-logs-cloudwatch.html"
   display_name "Cloudtrail Logs Integrated with CloudWatch"
   description "CloudTrail logs have not attempted delivery to CloudWatch in the last 24 hours. Ensure CloudWatch is integrated"
   category "Audit"
@@ -98,10 +98,10 @@ coreo_aws_rule "cloudtrail-logs-encrypted" do
   action :define
   service :user
   category "Audit"
-  link "https://benchmarks.cisecurity.org/tools2/amazon/CIS_Amazon_Web_Services_Foundations_Benchmark_v1.1.0.pdf#page=84"
+  link "http://kb.cloudcoreo.com/mydoc_cloudtrail-logs-encrypted.html"
   display_name "Verify CloudTrail logs are encrypted at rest using KMS CMKs"
   suggested_action "It is recommended that CloudTrail be configured to use SSE-KMS."
-  description "AWS CloudTrail is a web service that records AWS API calls for an account and makes those logs available to users and resources in accordance with IAM policies. AWS Key Management Service (KMS) is a managed service that helps create and control the encryption keys used to encrypt account data, and uses Hardware Security Modules (HSMs) to protect the security of encryption keys. CloudTrail logs can be configured to leverage server side encryption (SSE) and KMS customer created master keys (CMK) to further protect CloudTrail logs."
+  description "Cloudtrail logs are best encrypted in order to maximize security"
   level "Warning"
   meta_cis_id "2.7"
   meta_cis_scored "true"
