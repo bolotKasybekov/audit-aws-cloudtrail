@@ -53,7 +53,7 @@ coreo_aws_rule "cloudtrail-log-file-validating" do
   audit_objects ["object.trail_list.log_file_validation_enabled"]
   operators ["=="]
   raise_when [false]
-  id_map "object.trail_list.name"
+  id_map "stack.current_region"
 end
 
 coreo_aws_rule "cloudtrail-logs-cloudwatch" do
