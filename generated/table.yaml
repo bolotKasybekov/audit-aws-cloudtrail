@@ -1,0 +1,32 @@
+cloudtrail-inventory:
+  "AWS Cloud Object Name": "__OBJECT__"
+  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
+  "AWS Tags": "__TAGS__"
+cloudtrail-service-disabled:
+  "AWS Cloud Object Name": "__OBJECT__"
+  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
+  "AWS Tags": "__TAGS__"
+cloudtrail-log-file-validating:
+  "AWS Cloud Object Name": "__OBJECT__"
+  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
+  "AWS Tags": "__TAGS__"
+cloudtrail-logs-cloudwatch:
+  "AWS Cloud Object Name": "__OBJECT__"
+  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
+  "AWS Tags": "__TAGS__"
+cloudtrail-no-global-trails:
+  "AWS Cloud Object Name": "__OBJECT__"
+  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
+  "AWS Tags": "__TAGS__"
+cloudtrail-logs-encrypted:
+  "AWS Cloud Object Name": "__OBJECT__"
+  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
+  "AWS Tags": "__TAGS__"
+cloudtrail-trail-with-global:
+  "AWS Cloud Object Name": "__OBJECT__"
+  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
+  "AWS Tags": "__TAGS__"
+cloudtrail-inventory-1:
+  "AWS Cloud Object Name": "__OBJECT__"
+  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
+  "AWS Tags": "__TAGS__"

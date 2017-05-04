@@ -1,0 +1,14 @@
+variables:
+    AUDIT_AWS_CLOUDTRAIL_ALERT_LIST:
+        required: false
+        type: array
+        default:
+            - cloudtrail-inventory # not_violation 
+            - cloudtrail-service-disabled # cis_id:2.1 
+            - cloudtrail-log-file-validating # cis_id:2.2 
+            - cloudtrail-logs-cloudwatch # cis_id:2.4 
+            - cloudtrail-no-global-trails # 
+            - cloudtrail-logs-encrypted # cis_id:2.7 
+#             - cloudtrail-trail-with-global # not_violation 
+#             - cloudtrail-inventory-1 # not_violation 
+        description: "Which rules would you like to run? Possible values are cloudtrail-inventory cloudtrail-service-disabled cloudtrail-log-file-validating cloudtrail-logs-cloudwatch cloudtrail-no-global-trails cloudtrail-logs-encrypted"

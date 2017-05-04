@@ -35,7 +35,7 @@ This repo is designed to work with CloudCoreo. It will monitor CloudTrail agains
 ## Optional variables with default
 
 ### `AUDIT_AWS_CLOUDTRAIL_ALERT_LIST`:
-  * description: Which alerts would you like to check for? Default is all Cloudtrail alerts. Possible values are cloudtrail-inventory,cloudtrail-service-disabled,cloudtrail-log-file-validating,cloudtrail-logs-cloudwatch,cloudtrail-no-global-trails
+  * description: Which alerts would you like to check for? Default is all Cloudtrail alerts. Possible values are cloudtrail-inventory,cloudtrail-service-disabled,cloudtrail-log-file-validating,cloudtrail-logs-cloudwatch,cloudtrail-no-global-trails, cloudtrail-logs-encrypted
   * default: cloudtrail-inventory, cloudtrail-service-disabled, cloudtrail-log-file-validating, cloudtrail-logs-cloudwatch, cloudtrail-no-global-trails, cloudtrail-logs-encrypted
 
 ### `AUDIT_AWS_CLOUDTRAIL_OWNER_TAG`:
@@ -51,11 +51,12 @@ This repo is designed to work with CloudCoreo. It will monitor CloudTrail agains
 ## Tags
 1. Audit
 1. Best Practices
-1. Alert
+1. Inventory
 1. CloudTrail
 
+
 ## Categories
-1. Audit
+1. AWS_Services_Audit
 
 
 
@@ -65,3 +66,5 @@ This repo is designed to work with CloudCoreo. It will monitor CloudTrail agains
 
 ## Icon
 ![icon](https://raw.githubusercontent.com/CloudCoreo/audit-aws-cloudtrail/master/images/icon.png "icon")
+
+
