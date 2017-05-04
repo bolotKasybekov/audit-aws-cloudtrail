@@ -4,7 +4,7 @@ This stack will monitor CloudTrail and alert on things CloudCoreo developers thi
 
 
 ## Description
-This repo is designed to work with CloudCoreo. It will monitor CloudTrail against best practices for you and send a report to the email address designated by the config.yaml AUDIT&#95;AWS&#95;CLOUDTRAIL&#95;ALERT&#95;RECIPIENT value
+This composite monitors CloudTrail against best practices and optionally sends a report to the email address designated by the config.yaml AUDIT&#95;AWS&#95;CLOUDTRAIL&#95;ALERT&#95;RECIPIENT value
 
 
 ## Hierarchy
