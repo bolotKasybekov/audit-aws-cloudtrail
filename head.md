@@ -1,3 +1,3 @@
-audit CloudTrail
+CloudTrail Audit
 ============================
-This stack will monitor CloudTrail and alert on things CloudCoreo developers think are violations of best practices
+This composite monitors CloudTrail and reports best practice violations, CIS policy violations, and inventory
