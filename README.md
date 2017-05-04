@@ -56,7 +56,7 @@ This composite monitors CloudTrail against best practices and optionally sends a
 
 
 ## Categories
-1. AWS_Services_Audit
+1. AWS Services Audit
 
 
 
