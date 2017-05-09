@@ -326,7 +326,7 @@ coreo_uni_util_jsrunner "cis27-processor" do
   })
 
   const USER_RULE = 'cloudtrail-logs-encrypted'
-  const INVENTORY_RULE = 'cloudtrail-inventory';
+  const INVENTORY_RULE = 'cloudtrail-inventory-1';
 
   const regionArrayJSON = "${AUDIT_AWS_CLOUDTRAIL_REGIONS}";
   const regionArray = JSON.parse(regionArrayJSON.replace(/'/g, '"'))
