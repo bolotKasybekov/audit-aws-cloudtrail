@@ -343,7 +343,7 @@ coreo_uni_util_jsrunner "cis27-processor" do
 
       trails.forEach(trail => {
           if (!inventory[region][trail]['violations'][INVENTORY_RULE] || !verifyTrailContainsKMSkey(inventory[region][trail]['violations'][INVENTORY_RULE]['result_info'])){
-                updateOutputWithResults(region, trail, inventory[region][trail]['violations'][INVENTORY_RULE], USER_RULE);
+                updateOutputWithResults(region, trail, inventory[region][trail]['violations'][INVENTORY_RULE]['result_info'], USER_RULE);
           }
       })
   })
@@ -369,7 +369,9 @@ coreo_uni_util_jsrunner "cis27-processor" do
           violations[region][objectID]['violations'] = {};
       }
 
-      violations[region][objectID]['violations'][rule] = Object.assign(ruleMeta[rule]);
+      var rule_value = JSON.parse(JSON.stringify(ruleMeta[rule]));
+      rule_value['region'] = region
+      violations[region][objectID]['violations'][rule] = rule_value;
   }
 
   function verifyTrailContainsKMSkey(results) {
