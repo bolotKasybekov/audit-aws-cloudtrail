@@ -423,10 +423,9 @@ const NO_OWNER_EMAIL = "${AUDIT_AWS_CLOUDTRAIL_ALERT_RECIPIENT}";
 const OWNER_TAG = "${AUDIT_AWS_CLOUDTRAIL_OWNER_TAG}";
 const ALLOW_EMPTY = "${AUDIT_AWS_CLOUDTRAIL_ALLOW_EMPTY}";
 const SEND_ON = "${AUDIT_AWS_CLOUDTRAIL_SEND_ON}";
-
 const alertListArray = ${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST};
-const ruleInputs = {};
 
+const ruleInputs = {};
 let userSuppression;
 let userSchemes;
 
