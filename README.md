@@ -36,7 +36,7 @@ This composite monitors CloudTrail against best practices and optionally sends a
 
 ### `AUDIT_AWS_CLOUDTRAIL_ALERT_LIST`:
   * description: Which alerts would you like to check for? Default is all Cloudtrail alerts. Possible values are cloudtrail-inventory,cloudtrail-service-disabled,cloudtrail-log-file-validating,cloudtrail-logs-cloudwatch,cloudtrail-no-global-trails, cloudtrail-logs-encrypted
-  * default: cloudtrail-inventory, cloudtrail-service-disabled, cloudtrail-log-file-validating, cloudtrail-logs-cloudwatch, cloudtrail-no-global-trails, cloudtrail-logs-encrypted
+  * default: cloudtrail-service-disabled, cloudtrail-log-file-validating, cloudtrail-logs-cloudwatch, cloudtrail-no-global-trails, cloudtrail-logs-encrypted
 
 ### `AUDIT_AWS_CLOUDTRAIL_OWNER_TAG`:
   * description: Enter an AWS tag whose value is an email address of the owner of the Cloudtrail object. (Optional)
