@@ -4,7 +4,6 @@ variables:
         required: false
         type: array
         default:
-          - cloudtrail-inventory
           - cloudtrail-service-disabled
           - cloudtrail-log-file-validating
           - cloudtrail-logs-cloudwatch
