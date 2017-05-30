@@ -29,6 +29,7 @@ coreo_aws_rule "cloudtrail-service-disabled" do
   meta_cis_id "2.1"
   meta_cis_scored "true"
   meta_cis_level "1"
+  meta_nist_171_id "3.1.12, 3.3.7, 3.3.2"
   objectives ["trails"]
   formulas ["count"]
   audit_objects ["trail_list"]
@@ -68,6 +69,7 @@ coreo_aws_rule "cloudtrail-logs-cloudwatch" do
   meta_cis_id "2.4"
   meta_cis_scored "true"
   meta_cis_level "1"
+  meta_nist_171_id "3.3.6"
   objectives ["trails", "trail_status"]
   call_modifiers [{}, {:name => "object.trail_list.name"}]
   audit_objects ["", "object.latest_cloud_watch_logs_delivery_time"]
@@ -106,6 +108,7 @@ coreo_aws_rule "cloudtrail-logs-encrypted" do
   meta_cis_id "2.7"
   meta_cis_scored "true"
   meta_cis_level "2"
+  meta_nist_171_id "3.3.1"
   objectives [""]
   audit_objects [""]
   operators [""]
