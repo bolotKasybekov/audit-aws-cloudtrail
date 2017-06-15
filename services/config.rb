@@ -157,6 +157,7 @@ coreo_aws_rule_runner "cloudtrail-inventory-runner" do
   action :run
   service :cloudtrail
   rules ["cloudtrail-inventory-1"]
+  filter(${FILTERED_OBJECTS}) if ${FILTERED_OBJECTS}
 end
 
 coreo_uni_util_variables "cloudtrail-planwide" do
@@ -180,6 +181,7 @@ coreo_aws_rule_runner "advise-cloudtrail-u" do
   service :cloudtrail
   rules ["cloudtrail-log-file-validating"] if ${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}.include?("cloudtrail-log-file-validating")
   rules [""] if !(${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}.include?("cloudtrail-log-file-validating"))
+  filter(${FILTERED_OBJECTS}) if ${FILTERED_OBJECTS}
 end
 
 coreo_uni_util_variables "cloudtrail-update-planwide-1" do
