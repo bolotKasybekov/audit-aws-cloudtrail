@@ -48,6 +48,9 @@ This composite monitors CloudTrail against best practices and optionally sends a
 ### `AUDIT_AWS_CLOUDTRAIL_ALERT_RECIPIENT`:
   * description: Enter the email address(es) that will receive notifications. If more than one, separate each with a comma.
 
+### `FILTERED_OBJECTS`:
+  * description: JSON object of string or regex of aws objects to include or exclude and tag in audit
+
 ## Tags
 1. Audit
 1. Best Practices
