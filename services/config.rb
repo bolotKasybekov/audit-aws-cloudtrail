@@ -170,10 +170,12 @@ coreo_uni_util_variables "cloudtrail-planwide" do
             ])
 end
 
-coreo_aws_rule_runner_cloudtrail "advise-cloudtrail" do
+coreo_aws_rule_runner "advise-cloudtrail" do
   action :run
+  service :cloudtrail
   rules(${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}.push("cloudtrail-trail-with-global") - ["cloudtrail-log-file-validating"])
   regions ${AUDIT_AWS_CLOUDTRAIL_REGIONS}
+  filter(${FILTERED_OBJECTS}) if ${FILTERED_OBJECTS}
 end
 
 coreo_aws_rule_runner "advise-cloudtrail-u" do
@@ -187,8 +189,8 @@ end
 coreo_uni_util_variables "cloudtrail-update-planwide-1" do
   action :set
   variables([
-                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report'},
-                {'GLOBAL::number_violations' => 'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.number_violations'},
+                {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.report'},
+                {'GLOBAL::number_violations' => 'COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.number_violations'},
 
             ])
 end
@@ -197,10 +199,10 @@ coreo_uni_util_jsrunner "cloudtrail-aggregate" do
   action :run
   json_input '{"composite name":"PLAN::stack_name",
   "plan name":"PLAN::name",
-  "number_of_checks":"COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.number_checks",
-  "number_of_violations":"COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.number_violations",
-  "number_violations_ignored":"COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.number_ignored_violations",
-  "violations":COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report}'
+  "number_of_checks":"COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.number_checks",
+  "number_of_violations":"COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.number_violations",
+  "number_violations_ignored":"COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.number_ignored_violations",
+  "violations":COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.report}'
   function <<-EOH
 const alertArrayJSON = "${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}";
 const regionArrayJSON = "${AUDIT_AWS_CLOUDTRAIL_REGIONS}";
@@ -307,7 +309,7 @@ end
 coreo_uni_util_variables "cloudtrail-update-planwide-2" do
   action :set
   variables([
-                {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return'},
+                {'COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return'},
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.return'},
                 {'GLOBAL::number_violations' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-aggregate.violation_counter'}
             ])
@@ -315,7 +317,7 @@ end
 
 coreo_uni_util_jsrunner "cis27-processor" do
   action (("${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}".include?("cloudtrail-logs-encrypted")) ? :run : :nothing)
-  json_input (("${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}".include?("cloudtrail-logs-encrypted")) ? '[COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report, COMPOSITE::coreo_aws_rule_runner.cloudtrail-inventory-runner.report]' : '[]')
+  json_input (("${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}".include?("cloudtrail-logs-encrypted")) ? '[COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.report, COMPOSITE::coreo_aws_rule_runner.cloudtrail-inventory-runner.report]' : '[]')
   function <<-'EOH'
   const ruleMetaJSON = {
       'cloudtrail-logs-encrypted': COMPOSITE::coreo_aws_rule.cloudtrail-logs-encrypted.inputs
@@ -399,7 +401,7 @@ end
 coreo_uni_util_variables "cloudtrail-update-planwide-3" do
   action   action (("${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}".include?("cloudtrail-logs-encrypted")) ? :set : :nothing)
   variables([
-                {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cis27-processor.return'}
+                {'COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cis27-processor.return'}
             ])
 end
 
@@ -419,7 +421,7 @@ coreo_uni_util_jsrunner "cloudtrail-tags-to-notifiers-array" do
   json_input '{ "compositeName":"PLAN::stack_name",
                 "planName":"PLAN::name",
                 "cloudAccountName": "PLAN::cloud_account_name",
-                "violations": COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report}'
+                "violations": COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.report}'
   function <<-EOH
 
 const compositeName = json_input.compositeName;
@@ -496,7 +498,7 @@ coreo_uni_util_variables "cloudtrail-update-planwide-4" do
   action :set
   variables([
                 {'COMPOSITE::coreo_uni_util_variables.cloudtrail-planwide.results' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.JSONReport'},
-                {'COMPOSITE::coreo_aws_rule_runner_cloudtrail.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.report'},
+                {'COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.report' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.report'},
                 {'GLOBAL::table' => 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.table'}
           ])
 end
