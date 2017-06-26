@@ -173,16 +173,8 @@ end
 coreo_aws_rule_runner "advise-cloudtrail" do
   action :run
   service :cloudtrail
-  rules(${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}.push("cloudtrail-trail-with-global") - ["cloudtrail-log-file-validating"])
+  rules(${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}.push("cloudtrail-trail-with-global"))
   regions ${AUDIT_AWS_CLOUDTRAIL_REGIONS}
-  filter(${FILTERED_OBJECTS}) if ${FILTERED_OBJECTS}
-end
-
-coreo_aws_rule_runner "advise-cloudtrail-u" do
-  action :run
-  service :cloudtrail
-  rules ["cloudtrail-log-file-validating"] if ${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}.include?("cloudtrail-log-file-validating")
-  rules [""] if !(${AUDIT_AWS_CLOUDTRAIL_ALERT_LIST}.include?("cloudtrail-log-file-validating"))
   filter(${FILTERED_OBJECTS}) if ${FILTERED_OBJECTS}
 end
 
