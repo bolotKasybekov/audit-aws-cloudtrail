@@ -83,7 +83,8 @@ end
 
 coreo_aws_rule "cloudtrail-no-global-trails" do
   action :define
-  service :user
+  service :cloudtrail
+  type :user
   category "Audit"
   link "http://kb.cloudcoreo.com/mydoc_cloudtrail-trail-with-global.html"
   display_name "Cloudtrail Global Logging is Disabled"
@@ -100,7 +101,8 @@ end
 
 coreo_aws_rule "cloudtrail-logs-encrypted" do
   action :define
-  service :user
+  service :cloudtrail
+  type :user
   category "Audit"
   link "http://kb.cloudcoreo.com/mydoc_cloudtrail-logs-encrypted.html"
   display_name "Verify CloudTrail logs are encrypted at rest using KMS CMKs"
