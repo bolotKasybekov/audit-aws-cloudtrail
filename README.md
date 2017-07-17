@@ -45,6 +45,9 @@ This composite monitors CloudTrail against best practices and optionally sends a
 
 ## Optional variables with no default
 
+### `HTML_REPORT_SUBJECT`:
+  * description: Enter a custom report subject name.
+
 ### `AUDIT_AWS_CLOUDTRAIL_ALERT_RECIPIENT`:
   * description: Enter the email address(es) that will receive notifications. If more than one, separate each with a comma.
 
