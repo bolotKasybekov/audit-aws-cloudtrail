@@ -404,7 +404,7 @@ coreo_uni_util_jsrunner "cloudtrail-tags-to-notifiers-array" do
   packages([
                {
                    :name => "cloudcoreo-jsrunner-commons",
-                   :version => "1.10.7-beta57"
+                   :version => "1.10.7-beta59"
                },
                {
                    :name => "js-yaml",
@@ -412,6 +412,7 @@ coreo_uni_util_jsrunner "cloudtrail-tags-to-notifiers-array" do
                } ])
   json_input '{ "compositeName":"PLAN::stack_name",
                 "planName":"PLAN::name",
+                "teamName":"PLAN::team_name",
                 "cloudAccountName": "PLAN::cloud_account_name",
                 "violations": COMPOSITE::coreo_aws_rule_runner.advise-cloudtrail.report}'
   function <<-EOH
@@ -420,7 +421,7 @@ const compositeName = json_input.compositeName;
 const planName = json_input.planName;
 const cloudAccount = json_input.cloudAccountName;
 const cloudObjects = json_input.violations;
-
+const teamName = json_input.teamName;
 
 const NO_OWNER_EMAIL = "${AUDIT_AWS_CLOUDTRAIL_ALERT_RECIPIENT}";
 const OWNER_TAG = "${AUDIT_AWS_CLOUDTRAIL_OWNER_TAG}";
@@ -474,7 +475,7 @@ setTable();
 const argForConfig = {
     NO_OWNER_EMAIL, cloudObjects, userSuppression, OWNER_TAG,
     userSchemes, alertListArray, ruleInputs, ALLOW_EMPTY,
-    SEND_ON, cloudAccount, compositeName, planName, htmlReportSubject
+    SEND_ON, cloudAccount, compositeName, planName, htmlReportSubject, teamName
 }
 
 
@@ -483,6 +484,7 @@ function createConfig(argForConfig) {
         compositeName: argForConfig.compositeName,
         htmlReportSubject: argForConfig.htmlReportSubject,
         planName: argForConfig.planName,
+        teamName: argForConfig.teamName,
         violations: argForConfig.cloudObjects,
         userSchemes: argForConfig.userSchemes,
         userSuppression: argForConfig.userSuppression,
