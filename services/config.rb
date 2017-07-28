@@ -538,7 +538,7 @@ function setTextRollup() {
         const hasEmail = notifier['endpoint']['to'].length;
         if(hasEmail) {
             numberOfViolations += parseInt(notifier['num_violations']);
-            emailText += "recipient: " + notifier['endpoint']['to'] + " - " + "Violations: " + notifier['num_violations'] + "\\n";
+            emailText += "recipient: " + notifier['endpoint']['to'] + " - " + "Violations: " + notifier['numberOfViolatingCloudObjects'] + ", Cloud Objects: "+ (notifier["num_violations"]-notifier['numberOfViolatingCloudObjects']) + "\\n";
         }
     });
 
