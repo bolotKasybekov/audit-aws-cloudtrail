@@ -32,7 +32,7 @@ coreo_aws_rule "cloudtrail-service-disabled" do
   meta_nist_171_id "3.1.12, 3.3.7, 3.3.2"
   objectives ["trails"]
   formulas ["count"]
-  audit_objects ["trail_list"]
+  audit_objects ["object.trail_list"]
   operators ["=="]
   raise_when [0]
   id_map "stack.current_region"
@@ -131,7 +131,7 @@ coreo_aws_rule "cloudtrail-trail-with-global" do
   suggested_action "Ignore"
   level "Internal"
   objectives ["trails"]
-  audit_objects ["trail_list.include_global_service_events"]
+  audit_objects ["object.trail_list.include_global_service_events"]
   operators ["=="]
   raise_when [true]
   id_map "stack.current_region"
