@@ -74,7 +74,7 @@ coreo_aws_rule "cloudtrail-logs-cloudwatch" do
   objectives ["trails", "trail_status"]
   call_modifiers [{}, {:name => "object.trail_list.name"}]
   audit_objects ["", "object.latest_cloud_watch_logs_delivery_time"]
-  operators ["", "<"]
+  operators ["", ">"]
   raise_when ["", "1.day.ago"]
   id_map "modifiers.name"
 end
