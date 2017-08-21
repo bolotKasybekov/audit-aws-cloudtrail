@@ -601,10 +601,9 @@ coreo_aws_s3_policy "cloudcoreo-audit-aws-cloudtrail-policy" do
   EOF
 end
 
-coreo_aws_s3_bucket "${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}" do
+coreo_aws_s3_bucket "bucket-${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}" do
   action((("${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}".length > 0) ) ? :create : :nothing)
   bucket_policies ["cloudcoreo-audit-aws-cloudtrail-policy"]
-  region "us-east-1"
 end
 
 coreo_uni_util_notify "cloudcoreo-audit-aws-cloudtrail-s3" do
