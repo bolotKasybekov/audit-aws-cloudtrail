@@ -32,7 +32,7 @@ coreo_aws_rule "cloudtrail-service-disabled" do
   meta_nist_171_id "3.1.12, 3.3.7, 3.3.2"
   objectives ["trails"]
   formulas ["count"]
-  audit_objects ["trail_list"]
+  audit_objects ["object.trail_list"]
   operators ["=="]
   raise_when [0]
   id_map "stack.current_region"
@@ -74,7 +74,7 @@ coreo_aws_rule "cloudtrail-logs-cloudwatch" do
   objectives ["trails", "trail_status"]
   call_modifiers [{}, {:name => "object.trail_list.name"}]
   audit_objects ["", "object.latest_cloud_watch_logs_delivery_time"]
-  operators ["", "<"]
+  operators ["", ">"]
   raise_when ["", "1.day.ago"]
   id_map "modifiers.name"
 end
@@ -131,7 +131,7 @@ coreo_aws_rule "cloudtrail-trail-with-global" do
   suggested_action "Ignore"
   level "Internal"
   objectives ["trails"]
-  audit_objects ["trail_list.include_global_service_events"]
+  audit_objects ["object.trail_list.include_global_service_events"]
   operators ["=="]
   raise_when [true]
   id_map "stack.current_region"
@@ -404,7 +404,7 @@ coreo_uni_util_jsrunner "cloudtrail-tags-to-notifiers-array" do
   packages([
                {
                    :name => "cloudcoreo-jsrunner-commons",
-                   :version => "1.10.7-beta63"
+                   :version => "1.10.7-beta64"
                },
                {
                    :name => "js-yaml",
@@ -575,5 +575,46 @@ COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-rollup.return
   payload_type 'text'
   endpoint ({
       :to => '${AUDIT_AWS_CLOUDTRAIL_ALERT_RECIPIENT}', :subject => 'PLAN::stack_name New Rollup Report for PLAN::name plan from CloudCoreo'
+  })
+end
+
+coreo_aws_s3_policy "cloudcoreo-audit-aws-cloudtrail-policy" do
+  action((("${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}".length > 0) ) ? :create : :nothing)
+  policy_document <<-EOF
+{
+"Version": "2012-10-17",
+"Statement": [
+{
+"Sid": "",
+"Effect": "Allow",
+"Principal":
+{ "AWS": "*" }
+,
+"Action": "s3:*",
+"Resource": [
+"arn:aws:s3:::${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}/*",
+"arn:aws:s3:::${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}"
+]
+}
+]
+}
+  EOF
+end
+
+coreo_aws_s3_bucket "bucket-${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}" do
+  action((("${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}".length > 0) ) ? :create : :nothing)
+  bucket_policies ["cloudcoreo-audit-aws-cloudtrail-policy"]
+end
+
+coreo_uni_util_notify "cloudcoreo-audit-aws-cloudtrail-s3" do
+  action((("${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}".length > 0) ) ? :notify : :nothing)
+  type 's3'
+  allow_empty true
+  payload 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.report'
+  endpoint ({
+      object_name: 'aws-cloudtrail-json',
+      bucket_name: '${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}',
+      folder: 'cloudtrail/PLAN::name',
+      properties: {}
   })
 end

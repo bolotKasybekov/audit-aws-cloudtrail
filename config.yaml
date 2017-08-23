@@ -1,9 +1,9 @@
 variables:
     HTML_REPORT_SUBJECT:
-      required: false
-      type: string
-      default:
-      description: "Enter a custom report subject name."
+        required: false
+        type: string
+        default:
+        description: "Enter a custom report subject name."
     AUDIT_AWS_CLOUDTRAIL_ALERT_LIST:
         description: "Which alerts would you like to check for? Default is all Cloudtrail alerts. Possible values are cloudtrail-inventory,cloudtrail-service-disabled,cloudtrail-log-file-validating,cloudtrail-logs-cloudwatch,cloudtrail-no-global-trails, cloudtrail-logs-encrypted"
         required: false
@@ -58,3 +58,8 @@ variables:
         required: false
         type: string
         default:
+    AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME:
+        required: false
+        type: string
+        default:
+        description: "Enter S3 bucket name to upload reports. (Optional)"
