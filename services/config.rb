@@ -29,7 +29,7 @@ coreo_aws_rule "cloudtrail-service-disabled" do
   meta_cis_id "2.1"
   meta_cis_scored "true"
   meta_cis_level "1"
-  meta_nist_171_id "3.1.12, 3.3.7, 3.3.1, 3.3.2"
+  meta_nist_171_id "3.1.12, 3.3.7, 3.3.1, 3.3.2, 3.3.4"
   objectives ["trails"]
   formulas ["count"]
   audit_objects ["object.trail_list"]
@@ -90,7 +90,7 @@ coreo_aws_rule "cloudtrail-no-global-trails" do
   suggested_action "Enable CloudTrail global service logging in at least one region"
   description "CloudTrail global service logging is not enabled for the selected regions."
   level "Low"
-  meta_nist_171_id "3.3.1"
+  meta_nist_171_id "3.3.1, 3.3.4"
   objectives [""]
   audit_objects [""]
   operators [""]
