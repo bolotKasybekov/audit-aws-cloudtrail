@@ -613,7 +613,7 @@ coreo_uni_util_notify "cloudcoreo-audit-aws-cloudtrail-s3" do
   payload 'COMPOSITE::coreo_uni_util_jsrunner.cloudtrail-tags-to-notifiers-array.report'
   endpoint ({
       object_name: 'aws-cloudtrail-json',
-      bucket_name: '${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}',
+      bucket_name: 'bucket-${AUDIT_AWS_CLOUDTRAIL_S3_NOTIFICATION_BUCKET_NAME}',
       folder: 'cloudtrail/PLAN::name',
       properties: {}
   })
