@@ -15,3 +15,6 @@ cloudtrail-log-file-validating:
 cloudtrail-logs-encrypted:
  "Trail Name": "__OBJECT__~https://+__OBJECT__.violations.__RULE__.region+.console.aws.amazon.com/cloudtrail/home?region=+__OBJECT__.violations.__RULE__.region+#/configuration/+__OBJECT__.violator_info.trail_arn+"
  "AWS Region": "+__OBJECT__.violations.__RULE__.region+"
+default:
+  "Object ID": "__OBJECT__"
+  "Region": "+__OBJECT__.violations.__RULE__.region+"
